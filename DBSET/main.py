@@ -271,10 +271,10 @@ def getinfo(pokemon_name):
     ability_out= set()    
     for row in datas:
         ability_out=ability_out|{row[1]}
-        
-    return type_out,ability_out
+
     conn.close()  # 關閉數據庫連結
-    
+    return type_out,ability_out
+
 def method1(pokemon_name):
     type_out,ability_out = getinfo(pokemon_name)
     print(pokemon_name)
@@ -455,6 +455,7 @@ def method5(pokemon_type,pokemon_name):
         print("無差別")
         
     conn.close()  # 關閉數據庫連結
+
 def method6(pokemon_location):
 
     
@@ -484,12 +485,12 @@ def method6(pokemon_location):
 def main():
     #create_strong()
     #create_id()
-    # create_ability()
-    # create_weak()
-    # create_type()
+    #create_ability()
+    #create_weak()
+    #create_type()
     #create_location()
     # method6('''1號道路''')
-    method2('''雷丘''')
+    method4('''雷丘''', 1)
     
     # conn = sqlite3.connect("db_project.db")
 
