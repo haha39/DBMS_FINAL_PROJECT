@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>角色屬性及特性</title>
+  <title>基本資料</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -59,16 +59,54 @@
   </header><!-- End Header -->
 
 
-  <h1>ability : </h1>
+    <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>輸入寶可夢名稱，幫你找到寶可夢的特性及屬性</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+
+    <form name="表單" method="post" action="{{ url_for('result1') }}">
+        <div style="text-align: center; font-size: 40px">
+            <select name="key">
+                {% for data in ID %}
+                    <option value="{{ data[1] }}">{{ data[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="send">
+        </div>
+    </form>
+
+        <div style="text-align: center;  font-size: 60px">
+<p></p>
+  <p>名稱 : </p>
+      <p>{{ return_name }}</p>
+
+  <p>特性 : </p>
   {% for data in ability_list %}
-      <h2>{{ data[1] }}</h2>
+      <p>{{ data }}</p>
   {% endfor %}
 
-  <h1>type : </h1>
+  <p>屬性 : </p>
   {% for data in type_list %}
-      <h2>{{ data[1] }}</h2>
+      <p>{{ data }}</p>
   {% endfor %}
 
+  <p>出沒地點 : </p>
+    {% for data in location_list %}
+        <p>{{ data }}</p>
+    {% endfor %}
+
+
+  <img src="{{ photo }}"/>
+
+        </div>
 
 
 

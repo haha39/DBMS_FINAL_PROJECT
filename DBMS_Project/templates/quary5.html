@@ -58,23 +58,39 @@
     </div>
   </header><!-- End Header -->
 
-  <h2>輸入寶可夢角色及屬性，看看誰強誰弱</h2>
+
+      <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>輸入寶可夢角色及屬性，看看此屬性對寶可夢是否有效</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
 
       <form name="表單" method="post" action="{{ url_for('result5') }}">
-          <h1>請輸入角色名稱</h1>
-        <select name="key1">
-            {% for data in id_list %}
-                <option value="{{ data[1] }}">{{ data[1] }}</option>
-            {% endfor %}
-
-        </select>
+        <div style="text-align: center; font-size: 40px">
           <h1>請輸入屬性</h1>
         <select name="key2">
             {% for data in type_list %}
                 <option value="{{ data[0] }}">{{ data[0] }}</option>
             {% endfor %}
         </select>
+
+          <h1>請輸入寶可夢名稱</h1>
+        <select name="key1">
+            {% for data in id_list %}
+                <option value="{{ data[1] }}">{{ data[1] }}</option>
+            {% endfor %}
+
+        </select>
+
           <input type="submit" value="send">
+        </div>
       </form>
 
 

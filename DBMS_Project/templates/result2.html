@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>角色屬性及特性</title>
+  <title>出沒位置</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -58,9 +58,45 @@
     </div>
   </header><!-- End Header -->
 
-  {% for data in output %}
-      <h2>{{ data }}</h2>
+
+    <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>輸入地區，幫你找到該地區會出現的寶可夢</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+
+    <form name="表單" method="post" action="{{ url_for('result2') }}">
+                <div style="text-align: center; font-size: 40px">
+                        <select name="key">
+                          {% for data in datalist %}
+                            <option value="{{ data[0] }}">{{ data[0] }}</option>
+                          {% endfor %}
+                        </select>
+                        <input type="submit" value="send">
+                </div>
+    </form>
+
+
+<div style="text-align: center; font-size: 60px">
+<h1></h1>
+  {% for data in list %}
+      <p>{{ data }}</p>
+      <br>
   {% endfor %}
+</div>
+
+
+
+
+
+
 
 
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>

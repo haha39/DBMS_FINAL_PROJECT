@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>角色屬性及特性</title>
+  <title>尋找相同的屬性/特性</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -58,9 +58,60 @@
     </div>
   </header><!-- End Header -->
 
+     <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
 
-  <h1>hehehehhehehehe</h1>
-  <h1>{{ output }}</h1>
+        <div class="section-title">
+          <h2>輸入寶可夢角色，幫你找到相同特性或屬性的寶可夢</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+
+
+
+
+
+
+      <form name="表單" method="post" action="{{ url_for('result4') }}">
+        <div style="text-align: center; font-size: 40px">
+          <h1>請輸入角色名稱</h1>
+        <select name="key1">
+            {% for data in id_list %}
+                <option value="{{ data[1] }}">{{ data[1] }}</option>
+            {% endfor %}
+
+        </select>
+          <h1>屬性是否相同</h1>
+        <select name="key2">
+                 <option value="1">是</option>
+                <option value="0">否</option>
+        </select>
+
+        <h1>特性是否相同</h1>
+        <select name="key3">
+                <option value="1">是</option>
+                <option value="0">否</option>
+        </select>
+
+          <input type="submit" value="send">
+        </div>
+      </form>
+
+
+  <div style="text-align: center; font-size: 60px" >
+
+      {% for data in name_list %}
+            <p>{{ data }}</p>
+        {% endfor %}
+
+  </div>
+
+
+
 
 
 

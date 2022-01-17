@@ -58,9 +58,30 @@
     </div>
   </header><!-- End Header -->
 
-  <h2>輸入寶可夢角色，幫你找到角色相同屬性或特性的夥伴</h2>
+
+
+
+
+     <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>輸入寶可夢角色，幫你找到相同特性或屬性的寶可夢</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+
+
+
+
+
 
       <form name="表單" method="post" action="{{ url_for('result4') }}">
+        <div style="text-align: center; font-size: 40px">
           <h1>請輸入角色名稱</h1>
         <select name="key1">
             {% for data in id_list %}
@@ -68,19 +89,20 @@
             {% endfor %}
 
         </select>
-          <h1>是否要相同屬性</h1>
+          <h1>屬性是否相同</h1>
         <select name="key2">
+                 <option value="1">是</option>
                 <option value="0">否</option>
-                <option value="1">是</option>
         </select>
 
-        <h1>是否要相同特性</h1>
+        <h1>特性是否相同</h1>
         <select name="key3">
-                <option value="0">否</option>
                 <option value="1">是</option>
+                <option value="0">否</option>
         </select>
 
           <input type="submit" value="send">
+        </div>
       </form>
 
 

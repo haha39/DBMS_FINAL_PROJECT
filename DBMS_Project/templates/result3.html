@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>角色屬性及特性</title>
+  <title>地區分析</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -59,8 +59,49 @@
   </header><!-- End Header -->
 
 
-  <h1>evolve : </h1>
-      <h2>{{ output }}</h2>
+    <!-- ======= Our Team Section ======= -->
+    <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>輸入寶可夢角色，幫你找到與其相關的寶可夢</h2>
+        </div>
+
+
+      </div>
+    </section><!-- End Our Team Section -->
+
+
+    <form name="表單" method="post" action="{{ url_for('result3') }}">
+        <div style="text-align: center; font-size: 40px">
+            <select name="key">
+                {% for data in ID %}
+                    <option value="{{ data[1] }}">{{ data[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="send">
+        </div>
+    </form>
+
+
+
+  <div style="text-align: center; font-size: 60px" >
+      <p>相關的寶可夢(含) : </p>
+        {% for data in evolve_list %}
+            {{ data }}
+        {% endfor %}
+  </div>
+
+
+    <div style="text-align: center;">
+      {% for data in photo_list %}
+          <img src="{{ data }}"/>
+      {% endfor %}
+  </div>
+
+
+
+
 
 
 

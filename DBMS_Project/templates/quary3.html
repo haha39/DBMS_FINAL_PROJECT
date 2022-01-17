@@ -64,7 +64,7 @@
       <div class="container">
 
         <div class="section-title">
-          <h2>輸入寶可夢角色，幫你找到角色的進化和退化</h2>
+          <h2>輸入寶可夢角色，幫你找到與其相關的寶可夢</h2>
         </div>
 
 
@@ -73,25 +73,13 @@
 
 
     <form name="表單" method="post" action="{{ url_for('result3') }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-4"></div>
-                <div class = "col-4">請輸入寶可夢角色</div>
-                <div class="col-4"></div>
-            </div>
-
-            <div class="container">
-                <div class="row">
-                    <div class="col-4"></div>
-                        <select name="key">
-                          {% for data in ID %}
-                            <option value="{{ data[1] }}">{{ data[1] }}</option>
-                          {% endfor %}
-                        </select>
-                        <input type="submit" value="send">
-                    <div class="col-4"></div>
-                </div>
-            </div>
+        <div style="text-align: center; font-size: 40px">
+            <select name="key">
+                {% for data in ID %}
+                    <option value="{{ data[1] }}">{{ data[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="send">
         </div>
     </form>
 

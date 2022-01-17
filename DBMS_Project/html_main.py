@@ -1,5 +1,11 @@
 from flask import Flask, render_template, request
 import sqlite3
+import dbset_main
+
+
+#from dbset_main import
+
+
 
 app = Flask(__name__)
 
@@ -39,18 +45,60 @@ def getinfo(pokemon_name):
     conn.close()  # 關閉數據庫連結
     return type_out, ability_out
 
-#name 表單提交
-@app.route('/quary1')
-def quary1():
-    datalist = []
+def get_name_list():
     con = sqlite3.connect("db_project.db")
     cur = con.cursor()
+    datalist = []
     sql = "select * from id"
     data = cur.execute(sql)
     for item in data:
         datalist.append(item)
-    cur.close()
-    con.close()
+    return datalist
+
+def get_location_list():
+    con = sqlite3.connect("db_project.db")
+    cur = con.cursor()
+    datalist = []
+    sql = "select distinct location " \
+          "from Location " \
+          "order by location"
+    data = cur.execute(sql)
+    for item in data:
+        datalist.append(item)
+    return datalist
+
+def get_type_list():
+    con = sqlite3.connect("db_project.db")
+    cur = con.cursor()
+    type_list = []
+    sql_type = "select distinct type from Type"
+    data = cur.execute(sql_type)
+    for item in data:
+        type_list.append(item)
+    data = cur.execute(sql_type)
+    for item in data:
+        type_list.append(item)
+    return type_list
+
+def get_ability_list():
+    con = sqlite3.connect("db_project.db")
+    cur = con.cursor()
+    ability_list = []
+    sql_ability = "select distinct ability from Ability"
+    data = cur.execute(sql_ability)
+    for item in data:
+        ability_list.append(item)
+    data = cur.execute(sql_ability)
+    for item in data:
+        ability_list.append(item)
+    return ability_list
+
+
+#name 表單提交
+@app.route('/quary1')
+def quary1():
+    datalist = get_name_list()
+
     return render_template("quary1.html", ID=datalist)
 
 #input : id.name, output : Type.type && Ability.ability
@@ -58,102 +106,48 @@ def quary1():
 def result1():
     if request.method == 'POST':
         result = request.form
-        con = sqlite3.connect("db_project.db")
-        cur = con.cursor()
-
-        ability_list = []
-        type_list = []
 
         #get input(name)
         for key, value in result.items():
             return_name = value
 
-        sql_type = '''
-                    SELECT id.name, Type.type
-                    FROM id , Type
-                    WHERE id.pokemon_id = Type.pokemon_id AND id.name =
-                "''' + return_name +'''"'''
+        datalist = get_name_list()
 
-        TYPE = cur.execute(sql_type)  # 執行sql語句
+        photo, type_list, ability_list = dbset_main.method1(return_name)    #get type, ability, location
 
-        for row in TYPE:              #get its type
-            type_list.append(row)
+        location_list = dbset_main.method2(return_name)
 
-        sql_ability = '''
-                SELECT id.name, Ability.ability
-                FROM id , Ability
-                WHERE id.pokemon_id = Ability.pokemon_id AND id.name =
-            "''' + return_name +'''"'''
-
-        ABILITY = cur.execute(sql_ability)  # 執行sql語句
-
-        for row in ABILITY:         #get its ability
-            ability_list.append(row)
-
-        cur.close()
-        con.close()
-
-        return render_template("result1.html", result=result, ability_list=ability_list, type_list=type_list)
+        return render_template("result1.html", ID=datalist, return_name=return_name, ability_list=ability_list
+            , type_list=type_list, location_list=location_list, photo=photo)
 
 #name
 @app.route('/quary2')
 def quary2():
-    datalist = []
-    con = sqlite3.connect("db_project.db")
-    cur = con.cursor()
-    sql = "select * from id"
-    data = cur.execute(sql)
-    for item in data:
-        datalist.append(item)
-    cur.close()
-    con.close()
-    return render_template("quary2.html", ID=datalist)
+    datalist = get_location_list()
 
+    return render_template("quary2.html", datalist=datalist)
 
 #input : id.name, output : location
 @app.route('/result2', methods=['POST', 'GET'])
 def result2():
     if request.method == 'POST':
         result = request.form
-        con = sqlite3.connect("db_project.db")
-        cur = con.cursor()
 
         # get input(name)
         for key, value in result.items():
             return_name = value
 
-        sql = '''
-                SELECT  L.location
-                FROM    (SELECT pokemon_id
-                        FROM id
-                        WHERE name ="''' + return_name + '''") AS P, Location AS L
-                WHERE P.pokemon_id=L.pokemon_id
-            '''
-        cur.execute(sql)  # 執行sql語句
-        datas = cur.fetchall()
+    datalist = get_location_list()
+    list = dbset_main.method6(return_name)
 
-        location_set = set()
-        for row in datas:
-            location_set = location_set | {row[0]}
 
-        output = sorted(sorted(location_set), key=len)
-
-        con.close()  # 關閉數據庫連結
-
-        return render_template("result2.html", output=output)
+    return render_template("result2.html", datalist=datalist, list=list)
 
 #id
 @app.route('/quary3')
 def quary3():
-    datalist = []
-    con = sqlite3.connect("db_project.db")
-    cur = con.cursor()
-    sql = "select * from id"
-    data = cur.execute(sql)
-    for item in data:
-        datalist.append(item)
-    cur.close()
-    con.close()
+    datalist = get_name_list()
+
     return render_template("quary3.html", ID=datalist)
 
 #input : id.name, output : evolve name
@@ -161,91 +155,26 @@ def quary3():
 def result3():
     if request.method == 'POST':
         result = request.form
-        con = sqlite3.connect("db_project.db")
-        cur = con.cursor()
 
-        evolve_list = []
-
-        #get input(name)
+        # get input(name)
         for key, value in result.items():
             return_name = value
 
-        sql_id = '''
-                SELECT id.name,id.pokemon_id,id.evolve_id
-                FROM id
-                WHERE id.name = 
-            "''' + return_name + '''"'''
+        datalist = get_name_list()
 
-        ID = cur.execute(sql_id)  # 執行sql語句
+        evolve_list, photo_list = dbset_main.method3(return_name)
 
-        datas = cur.fetchall()
-        if (len(list(datas)) == 0):
-            print("Error, Pokemon not exist")
-            return
-
-        flag = True
-
-        output = list(datas)[0][0]
-        back = str(list(datas)[0][1])
-        forward = str(list(datas)[0][2])
-        flag = True
-        if (forward == "None"):
-            flag = False
-
-        while (flag):
-            sql = '''
-                    SELECT name,evolve_id
-                    FROM id
-                    WHERE pokemon_id = ''' + forward
-            cur.execute(sql)
-            datas = cur.fetchall()
-            output = output + "->" + list(datas)[0][0]
-            forward = str(list(datas)[0][1])
-            if (forward == "None"):
-                break
-
-        while (True):
-
-            sql = '''
-                    SELECT name,pokemon_id
-                    FROM id
-                    WHERE evolve_id = ''' + back
-            cur.execute(sql)
-            datas = cur.fetchall()
-            if (len(list(datas)) == 0):
-                break
-            output = list(datas)[0][0] + "->" + output
-            back = str(list(datas)[0][1])
-
-        cur.close()
-        con.close()
-
-        return render_template("result3.html", output=output)
+        return render_template("result3.html", ID=datalist, evolve_list=evolve_list, photo_list=photo_list)
 
 #id
 @app.route('/quary4')
 def quary4():
-    id_list = []
-    type_list = []
-    ability_list = []
-
     con = sqlite3.connect("db_project.db")
     cur = con.cursor()
 
-    sql_id = "select * from id"
-    data = cur.execute(sql_id)
-    for item in data:
-        id_list.append(item)
-
-    sql_ability = "select distinct ability from Ability"
-    data = cur.execute(sql_ability)
-    for item in data:
-        ability_list.append(item)
-
-    sql_type = "select distinct type from Type"
-    data = cur.execute(sql_type)
-    for item in data:
-        type_list.append(item)
+    id_list = get_name_list()
+    type_list = get_type_list()
+    ability_list = get_ability_list()
 
     cur.close()
     con.close()
@@ -259,80 +188,44 @@ def result4():
         result_type = request.form.get('key2')
         result_ability = request.form.get('key3')
 
-        con = sqlite3.connect("db_project.db")
-        cur = con.cursor()
+        id_list = get_name_list()
+        type_list = get_type_list()
+        ability_list = get_ability_list()
 
-        # # get input(name)
-        # print(result1)
-        # print(result2)
-        # print(result3)
+        if result_type == "1" and result_ability == "0":
+            print("1")
+            name_list = dbset_main.method4(result_name, 1)
+        elif result_type == "0" and result_ability == "1":
+            print("2")
+            name_list = dbset_main.method4(result_name, 2)
+        elif result_type == "1" and result_ability == "1":
+            print("3")
+            name_list = dbset_main.method4(result_name, 3)
 
-        sql_id = '''
-                   SELECT name
-                   FROM id
-                   WHERE name <> "''' + result_name + '''"'''
-
-        cur.execute(sql_id)  # 執行sql語句
-        datas = cur.fetchall()
-
-        pokemon_list = []
-        for row in datas:
-            pokemon_list = pokemon_list + [row[0]]
-
-        output = []
-        type_out, ability_out = getinfo(result_name)
-
-        print(type_out)
-        print(ability_out)
-        print(result_name)
-        print(result_type)
-        print(result_ability)
-
-        for p in pokemon_list:
-            t, a = getinfo(p)
-            if result_type == "1" and result_ability == "0":
-                if t == type_out:
-                    output = output + [p]
-            elif result_type == "0" and result_ability == "1":
-                if a == ability_out:
-                    output = output + [p]
-            elif result_type == "1" and result_ability == "1":
-                if t == type_out and a == ability_out:
-                    output = output + [p]
-
-
-        con.close()  # 關閉數據庫連結
-
-        return render_template("result4.html", output=output)
+        return render_template("result4.html", id_list=id_list, ability_list=ability_list, type_list=type_list, name_list=name_list)
 
 #id
 @app.route('/quary5')
 def quary5():
-    id_list = []
-    type_list = []
+    id_list = get_name_list()
+    type_list = get_type_list()
 
-    con = sqlite3.connect("db_project.db")
-    cur = con.cursor()
-
-    sql_id = "select * from id"
-    data = cur.execute(sql_id)
-    for item in data:
-        id_list.append(item)
-
-    sql_type = "select distinct type from Type"
-    data = cur.execute(sql_type)
-    for item in data:
-        type_list.append(item)
-
-    cur.close()
-    con.close()
     return render_template("quary5.html", id_list=id_list,  type_list=type_list)
 
 #input : id.name, output : location
 @app.route('/result5', methods=['POST', 'GET'])
 def result5():
+    if request.method == 'POST':
+        result_name = request.form.get('key1')
+        result_type = request.form.get('key2')
 
-        return render_template("result5.html")
+        id_list = get_name_list()
+        type_list = get_type_list()
+
+        output = dbset_main.method5(result_type, result_name)
+
+        return render_template("result5.html", id_list=id_list,  type_list=type_list, output=output
+                    , result_name=result_name, result_type=result_type)
 
 
 
@@ -345,4 +238,9 @@ def team():
 
 if __name__ == '__main__':
     app.run()
+
+
+
+
+
 
