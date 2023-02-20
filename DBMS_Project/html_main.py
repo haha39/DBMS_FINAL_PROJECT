@@ -229,8 +229,6 @@ def result5():
 
 
 
-
-
 @app.route('/team')
 def team():
     return render_template("team.html")
